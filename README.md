@@ -12,9 +12,9 @@ Luxury Wear es una aplicación que permite a los usuarios alquilar ropa de dise�
 Para ejecutar esta aplicación, asegúrate de tener instaladas las siguientes dependencias:
 
 - **Docker Engine**: Versión 20.10.7 o superior.
-    - Puedes instalar Docker Engine desde el [sitio web de Docker](https://docs.docker.com/engine/install/).
+  - Puedes instalar Docker Engine desde el [sitio web de Docker](https://docs.docker.com/engine/install/).
 - **Docker Compose**: Versión 1.29.2 o superior.
-    - Puedes instalar Docker Compose desde el [sitio web de Docker](https://docs.docker.com/compose/install/).
+  - Puedes instalar Docker Compose desde el [sitio web de Docker](https://docs.docker.com/compose/install/).
 - **Java 17**: Necesario para ejecutar la aplicación backend.
 - **Maven 3.6** o superior: Usado para construir el proyecto y gestionar sus dependencias.
 - **Git Bash**: Si usas Windows, te recomendamos utilizar **Git Bash** para ejecutar los comandos en esta sección. Git Bash proporciona una terminal estilo Unix para Windows y puedes instalarlo desde [Git for Windows](https://gitforwindows.org/).
@@ -55,21 +55,28 @@ El proyecto incluye un script, `clone_and_run.sh`, que automatiza las siguientes
 Para utilizarlo:
 
 1. **Inicia Docker**: Asegúrate de que el daemon de Docker esté ejecutándose en tu máquina o abre **Docker Desktop** para iniciarlo.
-2. **Ejecuta el script** usando Git Bash (o cualquier shell de Bash):
+2. En sistemas Unix (Linux y macOS), asegúrate de que el script tenga permisos de ejecución. Si no los tiene, ejecuta:
 
-    ```sh
-    ./clone_and_run.sh
-    ```
+   ```sh
+   chmod +x clone_and_run.sh
+   ```
+
+3. **Ejecuta el script** usando Git Bash (o cualquier shell de Bash):
+
+   ```sh
+   ./clone_and_run.sh
+   ```
 
    Si estás en Windows y usas **Git Bash**, asegúrate de estar en el directorio raíz del proyecto donde se encuentra el archivo `clone_and_run.sh` antes de ejecutar el comando.
 
    El script realizará las siguientes acciones:
+
    - Clonar o actualizar los repositorios requeridos en sus respectivos directorios.
    - Construir imágenes Docker para cada servicio.
    - Iniciar los servicios usando Docker Compose.
 
 - **Accede a la aplicación**:
-   - Una vez iniciada, el frontend estará disponible en `http://localhost:3000`.
+  - Una vez iniciada, el frontend estará disponible en `http://localhost:3000`.
 
 ### Detener la Aplicación
 
