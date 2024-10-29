@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # MySQL instance for Luxury-Wear-Service
+  luxury-wear-db:
+    container_name: luxury-wear-db
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - luxury-wear-network
+    ports:
+      - "3307:3306"
+
+  # LuxuryWearService application
+  luxury-wear-service:
+    container_name: luxury-wear-service
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_JDBC_URL: jdbc:mysql://luxury-wear-db:3306/luxury_wear_db_v2?createDatabaseIfNotExist=true
+      SPRING_JDBC_USERNAME: root
+      SPRING_JDBC_PASSWORD: rootpassword
+      ACTIVE_PROFILE: mysql
+    depends_on:
+      luxury-wear-db:
+        condition: service_healthy
+    networks:
+      - luxury-wear-network
+
+  # LuxuryWearFrontend application
+  luxury-wear-frontend:
+    container_name: luxury-wear-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80" # Expose the frontend on port 3000
+    networks:
+      - luxury-wear-network
+    depends_on:
+      - luxury-wear-service
+
+networks:
+  luxury-wear-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
