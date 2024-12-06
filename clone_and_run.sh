@@ -1,14 +1,19 @@
 #!/bin/bash
 
-# Define repository URLs and target directories
+ENV_FILE=".env.local"
+if [[ $1 == "remote" ]]; then
+  ENV_FILE=".env.production"
+fi
+
+echo "Using environment file: $ENV_FILE"
+
+# Define repositories and directories
 FRONTEND_REPO="https://github.com/Integrator-group-5/frontend.git"
 BACKEND_REPO="https://github.com/Integrator-group-5/backend.git"
-
-# Define target directories for each microservice
 FRONTEND_DIR="frontend"
 BACKEND_DIR="backend"
 
-# Function to clone repositories
+# Clone repositories
 clone_repo() {
   local repo_url=$1
   local target_dir=$2
@@ -41,4 +46,4 @@ fi
 
 # Run Docker Compose to build and start the services
 echo "Running docker-compose up --build..."
-docker compose -f docker-compose.yml up --build -d
+docker-compose --env-file $ENV_FILE -f docker-compose.yml up --build -d
