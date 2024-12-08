@@ -1,12 +1,5 @@
 #!/bin/bash
 
-ENV_FILE=".env.local"
-if [[ $1 == "remote" ]]; then
-  ENV_FILE=".env.production"
-fi
-
-echo "Using environment file: $ENV_FILE"
-
 # Define repositories and directories
 FRONTEND_REPO="https://github.com/Integrator-group-5/frontend.git"
 BACKEND_REPO="https://github.com/Integrator-group-5/backend.git"
@@ -44,6 +37,23 @@ if [ ! -d "frontend" ] || [ ! -d "backend" ]; then
   exit 1
 fi
 
+# Check if the "remote" argument is provided
+if [[ $1 == "remote" ]]; then
+  echo "Remote argument detected. Updating .env file in frontend directory."
+
+  # Change to the frontend directory
+  cd frontend
+  INSTANCE_PUBLIC_DNS=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
+  # Clear the contents of the .env file and write the new line
+  > .env  # This truncates the file to zero length
+  echo "VITE_API_BASE_URL=http://${INSTANCE_PUBLIC_DNS}:8080" > .env
+
+  echo ".env file updated with VITE_API_BASE_URL."
+
+  # Return to the root directory
+  cd ..
+fi
+
 # Run Docker Compose to build and start the services
 echo "Running docker-compose up --build..."
-docker-compose --env-file $ENV_FILE -f docker-compose.yml up --build -d
+docker-compose -f docker-compose.yml up --build -d
